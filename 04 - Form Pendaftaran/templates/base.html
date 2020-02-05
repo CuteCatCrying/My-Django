@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    {% include 'snippet/styles.html' %}
+</head>
+<body>
+    <h1 class="text-center">{{ page_title }}</h1>
+    {% block contents %}
+
+    {% endblock %}
+    {% include 'snippet/scripts.html' %}
+</body>
+</html>

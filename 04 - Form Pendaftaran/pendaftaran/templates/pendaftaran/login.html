@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+    {% if error %}
+        <div class="container">
+            <div class="alert alert-danger">
+                <strong>{{ error }}</strong>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if form_login.errors %}
+        {% for field in form_login %}
+            {% for error in field.errors %}
+                <div class="container">
+                    <div class="alert alert-danger">
+                        <strong>{{ field.label }} - {{ error }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <div class="form-row justify-content-center">
+                    {% for field in form_login %}
+                        <div class="col col-5">
+                            {{ field.label_tag|cut:':' }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="form-row justify-content-center mt-3">
+                    <div class="col col-10">
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

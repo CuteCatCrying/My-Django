@@ -1,0 +1,143 @@
+{% extends 'dashboard/base.html' %}
+
+{% block contents %}
+    {% include "dashboard/snippet/navbar.html" %}
+
+    <div class="container">
+        <h3 class="mt-3">Only Confirm Notification</h3>
+        <table class="table mt-3">
+            <thead>
+            <tr class="text-center">
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Feedback</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for notification_distinct in list_notification_distinct %}
+                <tr class="text-center">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td class="text-left">
+                        <button type="button" class="btn btn-link" data-toggle="modal"
+                                data-target="#listUserBaseOnTitleModal_{{ notification_distinct.title|slugify }}">{{ notification_distinct.title }}</button>
+                    </td>
+                    <td>
+                        {% for agree in list_notification_agree %}
+                            {% if agree.title == notification_distinct.title %}
+                                <button type="button" class="btn btn-success" data-toggle="modal"
+                                        data-target="#userAgreeModal_{{ agree.title|slugify }}">{{ agree.counter }}
+                                    Agree
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for disagree in list_notification_disagree %}
+                            {% if disagree.title == notification_distinct.title %}
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#userDisagreeModal_{{ disagree.title|slugify }}">{{ disagree.counter }}
+                                    Disagree
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal For User Agree-->
+    {% for notification_distinct in list_notification_distinct %}
+        <div class="modal fade" id="userAgreeModal_{{ notification_distinct.title|slugify }}" tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userAgreeModalTitle">List User Agree</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for user in list_user_agree %}
+                            {% if user.title == notification_distinct.title %}
+                                <h3>.{{ user.name }}</h3>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Modal For User Disagree-->
+    {% for notification_distinct in list_notification_distinct %}
+        <div class="modal fade" id="userDisagreeModal_{{ notification_distinct.title|slugify }}" tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userAgreeModalTitle">List User Disagree</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for user in list_user_disagree %}
+                            {% if user.title == notification_distinct.title %}
+                                <h3>.{{ user.name }}</h3>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Modal For List User Base On Title-->
+    {% for notification_distinct in list_notification_distinct %}
+        <div class="modal fade" id="listUserBaseOnTitleModal_{{ notification_distinct.title|slugify }}" tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="listUserBaseOnTitleModalLabel">List User
+                            <strong>{{ notification_distinct.title }}</strong></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Nama</th>
+                                <th scope="col">No HP</th>
+                                <th scope="col" class="text-center">Feedback</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in list_user_base_on_title %}
+                                {% if user.title == notification_distinct.title %}
+                                    <tr>
+                                        <td>{{ user.name }}</td>
+                                        <td>{{ user.noHp }}</td>
+                                        <td class="text-center">
+                                            {% if user.value_confirm_message%}
+                                                <button class="btn btn-success">Agree</button>
+                                            {% else %}
+                                                <button class="btn btn-danger">Disagree</button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

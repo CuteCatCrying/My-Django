@@ -1,0 +1,11 @@
+{% extends 'dashboard/base.html' %}
+
+{% block contents %}
+    {% include "dashboard/snippet/navbar.html" %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Selamat Datang</h1>
+            <p class="lead">{{ name }}</p>
+        </div>
+    </div>
+{% endblock %}

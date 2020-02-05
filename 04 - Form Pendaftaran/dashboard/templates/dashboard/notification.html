@@ -1,0 +1,126 @@
+{% extends 'dashboard/base.html' %}
+
+{% block contents %}
+    {% include "dashboard/snippet/navbar.html" %}
+
+    <!-- Button trigger modal -->
+    <div class="container mt-5 mb-5">
+        {% if request.user.is_staff %}
+            <div class="row">
+                <div class="col col-12">
+                    <button type="button" class="btn btn-success btn-block" data-toggle="modal"
+                            data-target="#notificationModal">
+                        Make Notification
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal X Form-->
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog"
+                     aria-labelledby="notificationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="notificationModalLabel">Make Notification</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            {{ form.title.label_tag|cut:':' }}
+                                            {{ form.title }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            {{ form.message.label_tag|cut:':' }}
+                                            {{ form.message }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-10">
+                                            {{ form.is_confirm_message.label_tag|cut:':' }}
+                                            {{ form.is_confirm_message }}
+                                        </div>
+                                    </div>
+                                    <div class="row collapse hide" id="confirmMessage">
+                                        <div class="col col-10">
+                                            {{ form.confirm_message.label_tag|cut:':' }}
+                                            {{ form.confirm_message }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                {{ form }}#}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+
+        {% for notification in notifications %}
+            <div class="accordion mt-3" id="accordionExample">
+            <div class="card">
+                {% if notification.viewed %}
+                    <div class="card-header bg-light" id="headingOne">
+                {% else %}
+                    <div class="card-header bg-dark text-light" id="headingOne">
+                {% endif %}
+
+                <h2 class="mb-0">
+                    <span>Title : <strong>{{ notification.title }}</strong></span>
+                    <button class="btn btn-link float-right" type="button" data-toggle="collapse"
+                            data-target="#{{ notification.title|slugify }}{{ notification.id }}"
+                            aria-expanded="true"
+                            aria-controls="{{ notification.title|slugify }}{{ notification.id }}">
+                        details
+                    </button>
+                </h2>
+                </div>
+
+                <div id="{{ notification.title|slugify }}{{ notification.id }}" class="collapse hide mb-3"
+                     aria-labelledby="headingOne" data-parent="#accordionExample">
+                    <div class="card-body">
+                        {{ notification.message }}
+
+                        {% if not notification.viewed %}
+                            <a class="btn btn-success float-right"
+                               href="{% url 'dashboard:notification' %}?mark-as-read={{ notification.id }}">Mark as read</a>
+                        {% endif %}
+
+                        {% if notification.is_confirm_message %}
+                            <button type="button" class="btn btn-info float-right mr-3" data-toggle="collapse"
+                                    data-target="#answer{{ notification.id }}">Give an answer!
+                            </button>
+
+                            <div class="collapse hide mt-5" id="answer{{ notification.id }}">
+                                <div class="dropdown-divider"></div>
+                                {{ notification.confirm_message }}
+                                {% if notification.is_answered %}
+                                    <button class="btn btn-success float-right" type="button">Thanks for answered</button>
+                                {% else %}
+                                    <a class="btn btn-danger float-right" href="{% url 'dashboard:notification'%}?disagree={{ notification.id }} ">Disagree</a>
+                                    <a class="btn btn-success float-right mr-3" href="{% url 'dashboard:notification'%}?agree={{ notification.id }} ">Agree</a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

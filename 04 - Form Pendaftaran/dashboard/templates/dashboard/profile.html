@@ -1,0 +1,21 @@
+{% extends 'dashboard/base.html' %}
+
+{% block contents %}
+    {% include "dashboard/snippet/navbar.html" %}
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <table>
+                {{ profile_form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-success">Update</button>
+        </form>
+    </div>
+{% endblock %}

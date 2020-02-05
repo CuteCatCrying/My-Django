@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logged In</title>
+</head>
+<body>
+    <h1>{{ full_name }}</h1>
+
+    {% if notifications.count > 0 %}
+        <h3>Notifications</h3>
+        {% for n in notifications %}
+            <p><a href="/show/{{ n.id }}">{{ n.title }}</a></p>
+        {% endfor %}
+
+    {% endif %}
+
+    <p><a href="/logout">Logout</a></p>
+</body>
+</html>

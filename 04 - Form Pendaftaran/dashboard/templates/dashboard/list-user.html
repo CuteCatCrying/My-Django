@@ -1,0 +1,50 @@
+{% extends 'dashboard/base.html' %}
+
+{% block contents %}
+    {% include "dashboard/snippet/navbar.html" %}
+
+    <div class="container">
+        <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                Status
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'dashboard:list-user' %}">All</a>
+                <a class="dropdown-item" href="{% url 'dashboard:list-user' %}?status=pnp ">Mahasiswa PNP</a>
+                <a class="dropdown-item" href="{% url 'dashboard:list-user' %}?status=umum ">Umum</a>
+            </div>
+
+            <div class="input-group ml-3">
+                <input type="text" class="form-control" placeholder="Nama.." id="searchbar">
+                <a class="btn btn-primary ml-2" href="" onclick="this.href='{% url 'dashboard:list-user' %}' + '?search=' + document.getElementById('searchbar').value;">Cari</a>
+            </div>
+        </div>
+        <h5 class="mt-2">Total : {{ total_list_user }} Orang</h5>
+
+        <table class="table mt-3">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nama</th>
+                <th scope="col">No HP</th>
+                <th scope="col">Email</th>
+                <th scope="col">Tanggal Lahir</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in list_user %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ user.nama }}</td>
+                    <td>{{ user.noHp }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.tanggalLahir }}</td>
+                    <td>{{ user.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

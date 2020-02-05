@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="container">
+                    <div class="alert alert-danger">
+                        <strong>{{ field.label }} = {{ error }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            {# cut adalah Built-in template tags and filters      #}
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col col-6">
+                        {{ form_signup.nama.label_tag|cut:':' }}
+                        {{ form_signup.nama }}
+                    </div>
+                    <div class="col col-4">
+                        {{ form_signup.email.label_tag|cut:':' }}
+                        {{ form_signup.email }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_signup.tanggalLahir.label_tag|cut:':' }}
+                <div class="form-row">
+                    <div class="col col-6 form-inline">
+                        {{ form_signup.tanggalLahir }}
+                    </div>
+                    <div class="col col-4">
+                        {{ form_signup.noHp.label_tag|cut:':' }}
+                        {{ form_signup.noHp }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_signup.status.label_tag|cut:':' }}
+                <div class="form-row">
+                    <div class="col col-6">
+                        {% for component in form_signup.status %}
+                            {#  artinya tidak data yang berisikan ------          #}
+                            {% if component.choice_label not in '---------' %}
+                                <div class="form-check">
+                                    {{ component.tag }}
+                                    <label for="{{ component.id_for_label }}" class="form-check-label">
+                                        {{ component.choice_label }}
+                                    </label>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col col-4">
+                        {{ form_signup.password.label_tag|cut:':' }}
+                        {{ form_signup.password }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-10">
+                    <button type="submit" class="btn btn-primary btn-block">Kirim</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

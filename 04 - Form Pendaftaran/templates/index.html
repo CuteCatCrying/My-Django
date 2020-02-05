@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+    <ul>
+        <li><a href="{% url 'pendaftaran:login' %}">Login</a></li>
+        <li><a href="{% url 'pendaftaran:signup' %}">Sign Up</a></li>
+    </ul>
+{% endblock %}
